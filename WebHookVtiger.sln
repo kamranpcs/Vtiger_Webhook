@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SRC", "SRC", "{CF97B9C0-DFA9-4E09-A6DF-B460C977E273}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{159E6CB2-EC06-4244-ABAC-69105F982E0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParsVT", "ParsVT\ParsVT.csproj", "{22046044-436A-4912-9664-DAA5F5CD041D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{43DC282A-AE77-485D-B7CF-79BE40658CB9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{22046044-436A-4912-9664-DAA5F5CD041D} = {CF97B9C0-DFA9-4E09-A6DF-B460C977E273}
+		{43DC282A-AE77-485D-B7CF-79BE40658CB9} = {159E6CB2-EC06-4244-ABAC-69105F982E0B}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{22046044-436A-4912-9664-DAA5F5CD041D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22046044-436A-4912-9664-DAA5F5CD041D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22046044-436A-4912-9664-DAA5F5CD041D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22046044-436A-4912-9664-DAA5F5CD041D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43DC282A-AE77-485D-B7CF-79BE40658CB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43DC282A-AE77-485D-B7CF-79BE40658CB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43DC282A-AE77-485D-B7CF-79BE40658CB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43DC282A-AE77-485D-B7CF-79BE40658CB9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
