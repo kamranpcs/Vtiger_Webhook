@@ -3,5 +3,6 @@
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;NUnit3x::43DC282A-AE77-485D-B7CF-79BE40658CB9::net8.0::UnitTest.Tests.Test1&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::43DC282A-AE77-485D-B7CF-79BE40658CB9::net8.0::UnitTest.Tests.TestTask&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::43DC282A-AE77-485D-B7CF-79BE40658CB9::net8.0::UnitTest.Tests.MultiStringConvertTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

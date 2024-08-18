@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.WellKnownTypes;
+using Mysqlx;
 using Mysqlx.Expect;
 
 namespace ParsVT;
@@ -21,7 +22,7 @@ public class Convertor
     {
         Dictionary<string, string> jsonDictionary = new Dictionary<string, string>();
         string[] elements = input.Split(";");
-        for (int i = 0; i <= elements.Length; i += 2  )
+        for (int i = 0; i < elements.Length; i += 2  )
         {
             string Key = elements[i];
             string Value = elements[i + 1];
@@ -34,8 +35,10 @@ public class Convertor
     public string SplitString(string InputString)
     {
         string[] splitStrings = InputString.Split(":");
+      
+
         return splitStrings.Last().Trim('\"');
-       
+
     }
 
 }
