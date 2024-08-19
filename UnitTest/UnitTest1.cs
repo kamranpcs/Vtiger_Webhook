@@ -10,10 +10,10 @@ public class Tests
     {
         string r = "s:10:\"workflowId\";\ns:2:\"81\";";
         var convertor = new Convertor();
-        KeyValuePair<string, string> expected = new KeyValuePair<string, string>( "workflowId","81") ;
-        Assert.AreEqual(expected,convertor.ToJson(r));
-
+        KeyValuePair<string, string> expected = new KeyValuePair<string, string>("workflowId", "81");
+        Assert.AreEqual(expected, convertor.KeyValueConvert(r));
     }
+
     [Test]
     public void MultiStringConvertTest3elemnts()
     {
@@ -22,44 +22,43 @@ public class Tests
         Dictionary<string, string> expected = new Dictionary<string, string>
         {
             {
-                "workflowId","82"
+                "workflowId", "82"
             },
             {
-                "summary","test webhook 2"
+                "summary", "test webhook 2"
             },
             {
                 "active", "1"
             }
-          
         };
-        Assert.AreEqual(expected,convertor.JsonCovert(input));
-        
+        Assert.AreEqual(expected, convertor.DicConvert(input));
     }
+
     [Test]
     public void MultiStringConvertTestWhitObject()
     {
-        string input = "s:10:\"workflowId\";s:2:\"82\";s:7:\"summary\";s:14:\"test webhook 2\";s:6:\"active\";b:1;s:7:\"trigger\";N;s:19:\"field_value_mapping\";s:155:\"[{\"fieldname\":\"\\u062a\\u0633\\u062a 1\",\"value\":\"mobile\",\"valuetype\":\"fieldname\"},{\"fieldname\":\"\\u062a\\u0633\\u062a 3\",\"value\":\"city\",\"valuetype\":\"fieldname\"}]\"";
+        string input =
+            "s:10:\"workflowId\";s:2:\"82\";s:7:\"summary\";s:14:\"test webhook 2\";s:6:\"active\";b:1;s:7:\"trigger\";N;s:19:\"field_value_mapping\";s:155:\"[{\"fieldname\":\"\\u062a\\u0633\\u062a 1\",\"value\":\"mobile\",\"valuetype\":\"fieldname\"},{\"fieldname\":\"\\u062a\\u0633\\u062a 3\",\"value\":\"city\",\"valuetype\":\"fieldname\"}]\"";
         var convertor = new Convertor();
         Dictionary<string, string> expected = new Dictionary<string, string>
         {
             {
-                "workflowId","82"
+                "workflowId", "82"
             },
             {
-                "summary","test webhook 2"
+                "summary", "test webhook 2"
             },
             {
                 "active", "1"
             },
             {
-                "trigger","N"
+                "trigger", "N"
             },
             {
-                "field_value_mapping" ,"{\"fieldname\":\"\\u062a\\u0633\\u062a 1\",\"value\":\"mobile\",\"valuetype\":\"fieldname\"},{\"fieldname\":\"\\u062a\\u0633\\u062a 3\",\"value\":\"city\",\"valuetype\":\"fieldname\"}"
+                "field_value_mapping",
+                "{\"fieldname\":\"\\u062a\\u0633\\u062a 1\",\"value\":\"mobile\",\"valuetype\":\"fieldname\"},{\"fieldname\":\"\\u062a\\u0633\\u062a 3\",\"value\":\"city\",\"valuetype\":\"fieldname\"}"
             }
-          
         };
-        Assert.AreEqual(expected,convertor.JsonCovert(input));
-        
+        Assert.AreEqual(expected, convertor.DicConvert(input));
     }
 }

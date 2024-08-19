@@ -6,7 +6,7 @@ namespace ParsVT;
 
 public class Convertor
 {
-    public KeyValuePair<string, string> ToJson(string Input)
+    public KeyValuePair<string, string> KeyValueConvert(string Input)
     {
         string[] elements = Input.Split(";");
         string key = elements[0];
@@ -16,7 +16,7 @@ public class Convertor
         return new KeyValuePair<string, string>(key, value);
     }
 
-    public Dictionary<string, string> JsonCovert(string input)
+    public Dictionary<string, string> DicConvert(string input)
     {
         Dictionary<string, string> jsonDictionary = new Dictionary<string, string>();
         string[] elements = input.Split(";");

@@ -6,9 +6,6 @@ MySqlCommand command = new MySqlCommand();
 command.Connection = connection;
 var app = builder.Build();
 
-app.MapGet("/", () =>
-{
-  
-});
+app.MapGet("/", () => { });
 
 app.Run();
