@@ -21,16 +21,18 @@ app.MapGet("/", () =>
     {
         string SQlCMD = "SELECT task FROM com_vtiger_workflowtasks where task like '%WebHookTask%'";
         List<string> webHookTaskConfigs = Connection.Query<string>(SQlCMD).ToList();
-        Dictionary<string, Dictionary<string, string>>
-            resultDictionary = new Dictionary<string, Dictionary<string, string>>();
+        // Dictionary<string, Dictionary<string, string>>
+        //     resultDictionary = new Dictionary<string, Dictionary<string, string>>();
+        List<Dictionary<string, string>> resultDictionary = new List<Dictionary<string, string>>();
         for (int i = 0; i < webHookTaskConfigs.Count; i++)
         {
             var DeserializeToJson = PhpSerializerNET.PhpSerialization.Deserialize(webHookTaskConfigs[i]);
             var ObjToJson = JsonSerializer.SerializeToNode(DeserializeToJson);
             Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic.Add(key: "id", ObjToJson["id"].ToString());
             dic.Add(key: "summery", ObjToJson["summary"].ToString());
             dic.Add(key: "webhook_url", ObjToJson["webhook_url"].ToString());
-            resultDictionary.Add(ObjToJson["id"].ToString(), dic);
+            resultDictionary.Add(dic);
         }
 
         return Results.Ok(resultDictionary);
