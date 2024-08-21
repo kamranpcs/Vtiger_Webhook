@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using System.Reflection;
+using Google.Protobuf.WellKnownTypes;
 using Mysqlx;
 using Mysqlx.Expect;
 
@@ -43,5 +44,21 @@ public class Convertor
 
         splitStrings = InputString.Split(":", 3);
         return splitStrings.Last().Trim('\"', '[', ']');
+    }
+
+   public  Dictionary<string,object> ObjectToDictionary(object obj)
+    {
+        var dictionary = new Dictionary<string,object>();
+
+        // Get all properties of the object using reflection
+        PropertyInfo[] properties = obj.GetType().GetProperties();
+
+        // Iterate through each property and add its name and value to the dictionary
+        foreach (var property in properties)
+        {
+            dictionary.Add(property.Name, property.GetValue(obj));
+        }
+
+        return dictionary;
     }
 }

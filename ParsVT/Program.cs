@@ -1,7 +1,16 @@
+using System.IO.Pipes;
+using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using ParsVT;
 using Dapper;
+using Kaitai;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using JsonSerializer = System.Text.Json.JsonSerializer;
+
 
 var builder = WebApplication.CreateBuilder(args);
 var ConnectionString = builder.Configuration.GetConnectionString("MySQLConnection");
@@ -12,13 +21,19 @@ app.MapGet("/", () =>
     {
         string SQlCMD = "SELECT task FROM com_vtiger_workflowtasks where task like '%WebHookTask%'";
         List<string> webHookTaskConfigs = Connection.Query<string>(SQlCMD).ToList();
-        List<object> ResultJson = new List<object>();
+        Dictionary<string, Dictionary<string, string>>
+            resultDictionary = new Dictionary<string, Dictionary<string, string>>();
         for (int i = 0; i < webHookTaskConfigs.Count; i++)
         {
-            ResultJson.Add(PhpSerializerNET.PhpSerialization.Deserialize(webHookTaskConfigs[i]));
+            var DeserializeToJson = PhpSerializerNET.PhpSerialization.Deserialize(webHookTaskConfigs[i]);
+            var ObjToJson = JsonSerializer.SerializeToNode(DeserializeToJson);
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic.Add(key: "summery", ObjToJson["summary"].ToString());
+            dic.Add(key: "webhook_url", ObjToJson["webhook_url"].ToString());
+            resultDictionary.Add(ObjToJson["id"].ToString(), dic);
         }
 
-        return Results.Ok(ResultJson);
+        return Results.Ok(resultDictionary);
     }
 });
 app.Run();
