@@ -1,3 +1,4 @@
+using System.Dynamic;
 using System.IO.Pipes;
 using System.Reflection;
 using System.Text;
@@ -59,18 +60,15 @@ app.MapGet("/FullConfig", () =>
             dynamic ObjSerialize = JsonSerializer.SerializeToNode(webHookConfigs[i]);
             var ObjTask = JsonSerializer.SerializeToNode(PhpSerializerNET.PhpSerialization.Deserialize(ObjSerialize["task"].ToString()));
             
+            
             var latestserialize = JsonSerializer.Serialize(ObjTask["field_value_mapping"].ToString());
-            
-            
             var objField = JsonSerializer.SerializeToNode(ObjTask["field_value_mapping"]);
             ClientSide CLSide = new ClientSide
             {
                 ModulName = ObjSerialize["module_name"].ToString(),
                 Test = ObjSerialize["test"].ToString(),
-                ExecutionCondition = ObjSerialize["execution_condition"].ToString(),
                 Summary = ObjSerialize["summary"].ToString(),
-                FieldValueMapping = Regex.Unescape(ObjTask["field_value_mapping"].ToString()) ,
-                HaederValueMapping = Regex.Unescape(ObjTask["header_value_mapping"].ToString()),
+                FieldValueMapping = JsonConvert.DeserializeObject<List<JsonField>>(ObjTask["field_value_mapping"].ToString()),
                 WebHookUrl = ObjTask["webhook_url"].ToString()
             };
             ListClientSides.Add(CLSide);
