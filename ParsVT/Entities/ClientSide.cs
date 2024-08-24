@@ -1,10 +1,12 @@
-﻿namespace ParsVT;
+﻿using Newtonsoft.Json.Linq;
+
+namespace ParsVT;
 
 public class ClientSide
 {
     public string ModulName { get; set; }
     public string Test { get; set; }
-    public int ExecutionCondition { get; set; }
+    public string ExecutionCondition { get; set; }
     public string Summary { get; set; }
     public string FieldValueMapping { get; set; }
     public string HaederValueMapping { get; set; }
