@@ -6,3 +6,26 @@ GET http://127.0.0.1:5232
 
 ###
 GET http://127.0.0.1:5232/FullConfig
+#####
+POST 127.0.0.1:5232/CreateWebhook
+Accept:application/json
+Content-Type: application/json
+
+{
+  "modulName": "Leads",
+  "test": "[]",
+  "summary": "test webhook 3",
+  "fieldValueMapping": [
+    {
+      "fieldname": "تست 21",
+      "value": "mobile",
+      "valuetype": "fieldname"
+    },
+    {
+      "fieldname": "تست 3",
+      "value": "city",
+      "valuetype": "fieldname"
+    }
+  ],
+  "webHookUrl": "http://test.test"
+}

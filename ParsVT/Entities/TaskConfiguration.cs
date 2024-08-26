@@ -7,7 +7,7 @@ public class TaskConfiguration
     public string summary { get; set; }
     public string active { get; set; }
     public string trigger { get; set; }
-    public string field_value_mapping { get; set; }
+    public List<JsonField> field_value_mapping { get; set; }
     public string id { get; set; }
     
 }

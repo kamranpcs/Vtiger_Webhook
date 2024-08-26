@@ -11,6 +11,7 @@ using MySql.Data.MySqlClient;
 using ParsVT;
 using Dapper;
 using Kaitai;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Math.EC;
@@ -50,7 +51,7 @@ app.MapGet("/FullConfig", () =>
             "SELECT wft.task,wft.workflow_id,wft.task_id,wft.summary,wf.module_name,wf.execution_condition,wf.test From com_vtiger_workflowtasks as wft INNER JOIN  com_vtiger_workflows as wf ON wft.workflow_id=wf.workflow_id where task like '%WebHookTask%'";
 
         var webHookConfigs = Connection.Query(JoinSQlCMD).ToList();
-        
+
         List<ClientSide> ListClientSides = new List<ClientSide>();
         List<string> teststring = new List<string>();
         List<object> objtest = new List<object>();
@@ -58,9 +59,11 @@ app.MapGet("/FullConfig", () =>
         for (int i = 0; i < webHookConfigs.Count; i++)
         {
             dynamic ObjSerialize = JsonSerializer.SerializeToNode(webHookConfigs[i]);
-            var ObjTask = JsonSerializer.SerializeToNode(PhpSerializerNET.PhpSerialization.Deserialize(ObjSerialize["task"].ToString()));
-            
-            
+            var ObjTask =
+                JsonSerializer.SerializeToNode(
+                    PhpSerializerNET.PhpSerialization.Deserialize(ObjSerialize["task"].ToString()));
+
+
             var latestserialize = JsonSerializer.Serialize(ObjTask["field_value_mapping"].ToString());
             var objField = JsonSerializer.SerializeToNode(ObjTask["field_value_mapping"]);
             ClientSide CLSide = new ClientSide
@@ -68,16 +71,39 @@ app.MapGet("/FullConfig", () =>
                 ModulName = ObjSerialize["module_name"].ToString(),
                 Test = ObjSerialize["test"].ToString(),
                 Summary = ObjSerialize["summary"].ToString(),
-                FieldValueMapping = JsonConvert.DeserializeObject<List<JsonField>>(ObjTask["field_value_mapping"].ToString()),
+                FieldValueMapping =
+                    JsonConvert.DeserializeObject<List<JsonField>>(ObjTask["field_value_mapping"].ToString()),
                 WebHookUrl = ObjTask["webhook_url"].ToString()
             };
             ListClientSides.Add(CLSide);
-            
-            
         }
-
-
         return Results.Ok(ListClientSides);
     }
+});
+app.MapPost("/CreateWebhook",  (ClientSide _clientSide) =>
+{
+    string tes = "";
+    int execution_condition = 3;
+    int filtersavedinnewworkflowname = 6;
+    int status = 1;
+    string sqlcommand =
+        $"insert into com_vtiger_workflows (module_name,summary,test,execution_condition,type,filtersavedinnew,status,workflowname) values (@module_name,@summary,@test,@execution_condition,@type,@filtersavedinnew,@status,@workflowname)";
+    MySqlConnection connection = new MySqlConnection(ConnectionString);
+    MySqlCommand command = new MySqlCommand(sqlcommand, connection);
+    command.Parameters.AddWithValue("@module_name", _clientSide.ModulName);
+    command.Parameters.AddWithValue("@summary", _clientSide.Summary);
+    command.Parameters.AddWithValue("@test", _clientSide.Test);
+    command.Parameters.AddWithValue("@execution_condition",execution_condition);
+    command.Parameters.AddWithValue("@type", "basic");
+    command.Parameters.AddWithValue("@filtersavedinnew", filtersavedinnewworkflowname);
+    command.Parameters.AddWithValue("@status",status);
+    command.Parameters.AddWithValue("@workflowname",_clientSide.Summary);
+    connection.Open();
+    command.ExecuteNonQuery();
+    sqlcommand = "SELECT LAST_INSERT_ID()";
+    var LatestIdInsert = connection.Query(sqlcommand).FirstOrDefault();
+    connection.Close();
+    int workflowid = Convert.ToInt32(LatestIdInsert["LAST_INSERT_ID"]);
+    return workflowid;
 });
 app.Run();
