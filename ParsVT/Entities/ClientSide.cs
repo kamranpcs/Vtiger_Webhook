@@ -6,6 +6,7 @@ namespace ParsVT;
 
 public class ClientSide
 {
+    public string id { get; set; }
     public string ModulName { get; set; }
     public string Test { get; set; }
     public string Summary { get; set; }
