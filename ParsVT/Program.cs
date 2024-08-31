@@ -75,14 +75,14 @@ app.MapGet("/FullConfig", () =>
                 FieldValueMapping =
                     JsonConvert.DeserializeObject<List<JsonField>>(ObjTask["field_value_mapping"].ToString()),
                 WebHookUrl = ObjTask["webhook_url"].ToString()
-                
             };
             ListClientSides.Add(CLSide);
         }
+
         return Results.Ok(ListClientSides);
     }
 });
-app.MapPost("/CreateWebhook",  (ClientSide _clientSide) =>
+app.MapPost("/CreateWebhook", (ClientSide _clientSide) =>
 {
     string tes = "";
     int execution_condition = 3;
@@ -95,11 +95,11 @@ app.MapPost("/CreateWebhook",  (ClientSide _clientSide) =>
     command.Parameters.AddWithValue("@module_name", _clientSide.ModulName);
     command.Parameters.AddWithValue("@summary", _clientSide.Summary);
     command.Parameters.AddWithValue("@test", _clientSide.Test);
-    command.Parameters.AddWithValue("@execution_condition",execution_condition);
+    command.Parameters.AddWithValue("@execution_condition", execution_condition);
     command.Parameters.AddWithValue("@type", "basic");
     command.Parameters.AddWithValue("@filtersavedinnew", filtersavedinnewworkflowname);
-    command.Parameters.AddWithValue("@status",status);
-    command.Parameters.AddWithValue("@workflowname",_clientSide.Summary);
+    command.Parameters.AddWithValue("@status", status);
+    command.Parameters.AddWithValue("@workflowname", _clientSide.Summary);
     connection.Open();
     command.ExecuteNonQuery();
     sqlcommand = "SELECT LAST_INSERT_ID()";
@@ -111,27 +111,7 @@ app.MapPost("/CreateWebhook",  (ClientSide _clientSide) =>
         var value = id.Value;
         workflowid = value.ToString();
     }
-   
-    
-    
     connection.Close();
-    //////////////////////////////// End WorkFlow Insert/////////////////////////////////////
-    // string FieldSQLCommand = $"SELECT * FROM vtiger_field where tablename like '%{_clientSide.ModulName}%'";
-    // connection.Open();
-    // var ModulFields = connection.Query(FieldSQLCommand).ToList();
-    // connection.Close();
-    // List<JsonField> FieldsForJson = new List<JsonField>();
-    // foreach (var field in ModulFields)
-    // {
-    //     JsonField jsonField = new JsonField
-    //     {
-    //         Fieldname = field["fieldname"].ToString(),
-    //         Value = field["fieldname"].ToString(),
-    //         Valuetype = "fieldname"
-    //     };
-    //     FieldsForJson.Add(jsonField);
-    // }
-    // return FieldsForJson;
     List<JsonField> field = _clientSide.FieldValueMapping;
     TaskConfiguration _taskConfig = new TaskConfiguration
     {
@@ -158,9 +138,19 @@ app.MapPost("/CreateWebhook",  (ClientSide _clientSide) =>
         update_value_mapping = null,
         use_response = "1",
         soap_version = "Auto",
-        id =Convert.ToInt32(_clientSide.id) 
+        id = Convert.ToInt32(_clientSide.id)
     };
-    var SerializedConfiguration = PhpSerializerNET.PhpSerialization.Serialize(_taskConfig);
-    return SerializedConfiguration;
+    string SerializedConfiguration = PhpSerializerNET.PhpSerialization.Serialize(_taskConfig);
+    string FullTaskSerialized = "O:11:\"WebHookTask\"" + SerializedConfiguration.Remove(1, 1);
+    sqlcommand =
+        $"insert into com_vtiger_workflowtasks (task_id,workflow_id,summary,task) values(@task_id,@workflow_id,@summary,@task)";
+    command = new MySqlCommand(sqlcommand, connection);
+    command.Parameters.AddWithValue("@task_id", _clientSide.id);
+    command.Parameters.AddWithValue("@workflow_id", workflowid);
+    command.Parameters.AddWithValue("@summary", _clientSide.Summary);
+    command.Parameters.AddWithValue("@task", FullTaskSerialized);
+    connection.Open();
+    command.ExecuteNonQuery();
+    connection.Close();
 });
 app.Run();
