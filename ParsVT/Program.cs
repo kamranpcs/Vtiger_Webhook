@@ -141,7 +141,7 @@ app.MapPost("/CreateWebhook", (ClientSide _clientSide) =>
         id = Convert.ToInt32(_clientSide.id)
     };
     string SerializedConfiguration = PhpSerializerNET.PhpSerialization.Serialize(_taskConfig);
-    string FullTaskSerialized = "O:11:\"WebHookTask\"" + SerializedConfiguration.Remove(1, 1);
+    string FullTaskSerialized = "O:11:\"WebHookTask\"" + SerializedConfiguration.Remove(0, 1);
     sqlcommand =
         $"insert into com_vtiger_workflowtasks (task_id,workflow_id,summary,task) values(@task_id,@workflow_id,@summary,@task)";
     command = new MySqlCommand(sqlcommand, connection);
